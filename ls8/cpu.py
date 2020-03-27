@@ -72,7 +72,7 @@ class CPU:
             if self.reg[reg_a] == self.reg[reg_b]:
                 E = '1'
 
-            self.fl = int(f'00000{L}{G}{E}', 2)
+            self.fl = int(f'{L}{G}{E}', 2)
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -84,7 +84,7 @@ class CPU:
 
         print(f"TRACE: %02X | %02X %02X %02X |" % (
             self.pc,
-            #self.fl,
+            # self.fl,
             #self.ie,
             self.ram_read(self.pc),
             self.ram_read(self.pc + 1),
@@ -149,11 +149,15 @@ class CPU:
 
         def JEQ(operand_a):
             if bin(self.fl)[-1] == '1':
-                self.pc == self.reg[operand_a]
+                self.pc = self.reg[operand_a]
+            else:
+                self.pc += 2
 
         def JNE(operand_a):
             if bin(self.fl)[-1] == '0':
-                self.pc == self.reg[operand_a]
+                self.pc = self.reg[operand_a]
+            else:
+                self.pc += 2
 
 
         # Other
