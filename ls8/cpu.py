@@ -9,7 +9,8 @@ class CPU:
         """Construct a new CPU."""
         self.ram = [0] * 256
         self.reg = [0] * 8
-        self.pc = 0
+        self.pc = 0 # program counter
+        self.fl = 0 # flags register
 
         # stack pointer:
         self.reg[7] = 0xF4 # F4 is ram address of 'Key Pressed'; stack ranges from F3 _downward_
@@ -57,6 +58,21 @@ class CPU:
             self.reg[reg_a] -= self.reg[reg_b]
         elif op == "MUL":
             self.reg[reg_a] *= self.reg[reg_b]
+        elif op == "CMP":
+            # FL holds bits of the form '00000LGE', where L = '<', G = '>', and E = '='
+            L = '0'
+            G = '0'
+            E = '0'
+
+            if self.reg[reg_a] < self.reg[reg_b]:
+                L = '1'
+            elif self.reg[reg_a] > self.reg[reg_b]:
+                G = '1'
+
+            if self.reg[reg_a] == self.reg[reg_b]:
+                E = '1'
+
+            self.fl = int(f'00000{L}{G}{E}', 2)
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -87,6 +103,7 @@ class CPU:
             'ADD': 0b10100000,
             'SUB': 0b10100001,
             'MUL': 0b10100010,
+            'CMP': 0b10100111,
 
             # PC mutators
             'CALL': 0b01010000,
@@ -109,6 +126,9 @@ class CPU:
 
         def MUL(reg_a, reg_b):
             self.alu('MUL', reg_a, reg_b)
+
+        def CMP(reg_a, reg_b):
+            self.alu('CMP', reg_a, reg_b)
 
 
         # PC mutators
@@ -149,6 +169,7 @@ class CPU:
             ops['ADD']: ADD,
             ops['SUB']: SUB,
             ops['MUL']: MUL,
+            ops['CMP']: CMP,
 
             # PC mutators
             ops['CALL']: CALL,
