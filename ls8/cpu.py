@@ -109,6 +109,8 @@ class CPU:
             'CALL': 0b01010000,
             'RET': 0b00010001,
             'JMP': 0b01010100,
+            'JEQ': 0b01010101,
+            'JNE': 0b01010110,
 
             # Other
             'HLT': 0b00000001,
@@ -145,6 +147,14 @@ class CPU:
         def JMP(operand_a):
             self.pc = self.reg[operand_a]
 
+        def JEQ(operand_a):
+            if bin(self.fl)[-1] == '1':
+                self.pc == self.reg[operand_a]
+
+        def JNE(operand_a):
+            if bin(self.fl)[-1] == '0':
+                self.pc == self.reg[operand_a]
+
 
         # Other
         def HLT():
@@ -179,6 +189,8 @@ class CPU:
             ops['CALL']: CALL,
             ops['RET']: RET,
             ops['JMP']: JMP,
+            ops['JEQ']: JEQ,
+            ops['JNE']: JNE,
 
             # Other
             ops['HLT']: HLT,
