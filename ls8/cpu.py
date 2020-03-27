@@ -233,6 +233,13 @@ class CPU:
             ops['SUB']: SUB,
             ops['MUL']: MUL,
             ops['CMP']: CMP,
+            ops['AND']: AND,
+            ops['OR']: OR,
+            ops['XOR']: XOR,
+            ops['NOT']: NOT,
+            ops['SHL']: SHL,
+            ops['SHR']: SHR,
+            ops['MOD']: MOD,
 
             # PC mutators
             ops['CALL']: CALL,
@@ -240,13 +247,6 @@ class CPU:
             ops['JMP']: JMP,
             ops['JEQ']: JEQ,
             ops['JNE']: JNE,
-            ops['ADD']: ADD,
-            ops['OR']: OR,
-            ops['XOR']: XOR,
-            ops['NOT']: NOT,
-            ops['SHL']: SHL,
-            ops['SHR']: SHR,
-            ops['MOD']: MOD,
 
             # Other
             ops['HLT']: HLT,
