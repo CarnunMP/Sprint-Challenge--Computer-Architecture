@@ -108,6 +108,7 @@ class CPU:
             # PC mutators
             'CALL': 0b01010000,
             'RET': 0b00010001,
+            'JMP': 0b01010100,
 
             # Other
             'HLT': 0b00000001,
@@ -140,6 +141,9 @@ class CPU:
         def RET():
             POP(0)
             self.pc = self.reg[0]
+
+        def JMP(operand_a):
+            self.pc = self.reg[operand_a]
 
 
         # Other
@@ -174,6 +178,7 @@ class CPU:
             # PC mutators
             ops['CALL']: CALL,
             ops['RET']: RET,
+            ops['JMP']: JMP,
 
             # Other
             ops['HLT']: HLT,
