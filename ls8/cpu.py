@@ -49,7 +49,7 @@ class CPU:
             address += 1
 
 
-    def alu(self, op, reg_a, reg_b):
+    def alu(self, op, reg_a, reg_b = None):
         """ALU operations."""
 
         if op == "ADD":
@@ -73,6 +73,24 @@ class CPU:
                 E = '1'
 
             self.fl = int(f'{L}{G}{E}', 2)
+        elif op == "AND":
+            self.reg[reg_a] = self.reg[reg_a] & self.reg[reg_b]
+        elif op == "OR":
+            self.reg[reg_a] = self.reg[reg_a] | self.reg[reg_b]
+        elif op == "XOR":
+            self.reg[reg_a] = self.reg[reg_a] ^ self.reg[reg_b]
+        elif op == "NOT":
+            self.reg[reg_a] = ~self.reg[reg_a]
+        elif op == "SHL":
+            self.reg[reg_a] = self.reg[reg_a] << self.reg[reg_b]
+        elif op == "SHR":
+            self.reg[reg_a] = self.reg[reg_a] >> self.reg[reg_b]
+        elif op == "MOD":
+            if self.reg[reg_b] == 0:
+                print(f'Instruction {self.pc} tried to divide by 0. Naughty!')
+                sys.exit()
+
+            self.reg[reg_a] = self.reg[reg_a] % self.reg[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -104,6 +122,13 @@ class CPU:
             'SUB': 0b10100001,
             'MUL': 0b10100010,
             'CMP': 0b10100111,
+            'AND': 0b10101000,
+            'OR': 0b10101010,
+            'XOR': 0b10101011,
+            'NOT': 0b01101001,
+            'SHL': 0b10101100,
+            'SHR': 0b10101101,
+            'MOD': 0b10100100,
 
             # PC mutators
             'CALL': 0b01010000,
@@ -133,6 +158,26 @@ class CPU:
         def CMP(reg_a, reg_b):
             self.alu('CMP', reg_a, reg_b)
 
+        def AND(reg_a, reg_b):
+            self.alu('AND', reg_a, reg_b)
+            
+        def OR(reg_a, reg_b):
+            self.alu('OR', reg_a, reg_b)
+
+        def XOR(reg_a, reg_b):
+            self.alu('XOR', reg_a, reg_b)
+
+        def NOT(reg_a):
+            self.alu('NOT', reg_a)
+
+        def SHL(reg_a, reg_b):
+            self.alu('SHL', reg_a, reg_b)
+
+        def SHR(reg_a, reg_b):
+            self.alu('SHR', reg_a, reg_b)
+
+        def MOD(reg_a, reg_b):
+            self.alu('MOD', reg_a, reg_b)
 
         # PC mutators
         def CALL(operand_a):
@@ -195,6 +240,13 @@ class CPU:
             ops['JMP']: JMP,
             ops['JEQ']: JEQ,
             ops['JNE']: JNE,
+            ops['ADD']: ADD,
+            ops['OR']: OR,
+            ops['XOR']: XOR,
+            ops['NOT']: NOT,
+            ops['SHL']: SHL,
+            ops['SHR']: SHR,
+            ops['MOD']: MOD,
 
             # Other
             ops['HLT']: HLT,
